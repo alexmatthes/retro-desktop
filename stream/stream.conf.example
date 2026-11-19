@@ -1,0 +1,30 @@
+# Copy this file to stream.conf and fill in your stream key:
+#   cp stream.conf.example stream.conf && nano stream.conf
+# stream.conf is in .gitignore. NEVER commit it: anyone with the key can stream to your channel.
+
+# YouTube Studio -> Create -> Go live -> Stream -> "Stream key"
+STREAM_KEY="paste-your-key-here"
+
+# YouTube's secure ingest. If ffmpeg can't connect, try the plain one:
+#   RTMP_URL="rtmp://a.rtmp.youtube.com/live2"
+RTMP_URL="rtmps://a.rtmps.youtube.com/live2"
+
+# Video. 1280x720 is the page's native size; keep it unless the PC has power to spare.
+WIDTH=1280
+HEIGHT=720
+FPS=30                 # try 24 or 20 if the encoder can't keep up
+VIDEO_BITRATE=2500k
+X264_PRESET=veryfast   # slower CPU? superfast, then ultrafast (lighter but blockier)
+AUDIO_BITRATE=128k
+
+# Local web server that shows the desktop page to the browser.
+PORT=8080
+
+# Restart the browser this often to clear memory leaks (a few seconds of blank screen).
+CHROME_RESTART_HOURS=24
+
+# Extra browser flags, if ever needed. Leave empty normally.
+CHROME_EXTRA_FLAGS=""
+
+# Testing: set this to record to a file instead of going live, e.g. "/tmp/test.flv"
+TEST_OUTPUT=""
