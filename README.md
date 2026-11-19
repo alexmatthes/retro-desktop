@@ -15,7 +15,7 @@ It's a fixed 1280x720 "screen" that scales to fit any window.
 | `js/desktop.js` | The logic: clocks, timer, music player, visualizer, weather |
 | `music/` | Your audio files go here |
 
-## Run it on your laptop
+## Run it locally
 
 Browsers block some audio features on pages opened straight from a file, so serve the folder:
 
@@ -41,7 +41,7 @@ The player shuffles, plays everything, reshuffles and loops forever. A broken fi
 It's tied to the clock, not to when the page loaded. With 50/10 it's focus from :00 to :50 and a
 break from :50 to :00 every hour, so every viewer sees the same thing and a restart doesn't reset it.
 
-## Put it on GitHub (from your laptop)
+## Running it On another Machine
 
 `stream.conf` (your stream key) and the music files are in `.gitignore`, so the repo is safe to make public.
 
@@ -53,7 +53,7 @@ git remote add origin https://github.com/YOUR-NAME/study-desk.git
 git branch -M main && git push -u origin main
 ```
 
-## Set up the OptiPlex (once)
+## Set up the Other Machine
 
 ```bash
 git clone https://github.com/YOUR-NAME/study-desk.git ~/study-desk
@@ -62,7 +62,7 @@ bash stream/setup.sh             # installs Xvfb, PulseAudio, ffmpeg, fonts, Chr
 nano stream/stream.conf          # paste your YouTube stream key
 ```
 
-Copy your music over from the laptop (music isn't in git):
+Copy your music over from your machine:
 
 ```bash
 scp music/* YOUR-USER@OPTIPLEX-IP:~/study-desk/music/
