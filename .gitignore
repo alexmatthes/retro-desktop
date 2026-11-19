@@ -1,0 +1,7 @@
+# Holds your stream key - never commit it
+stream/stream.conf
+
+# Music stays out of the repo (big files, and most licenses don't allow re-sharing the files).
+# Copy it to the stream PC separately.
+music/*
+!music/PUT_MUSIC_HERE.txt
