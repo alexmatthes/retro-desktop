@@ -45,18 +45,10 @@ break from :50 to :00 every hour, so every viewer sees the same thing and a rest
 
 `stream.conf` (your stream key) and the music files are in `.gitignore`, so the repo is safe to make public.
 
-```bash
-cd retro-desktop
-git init && git add . && git commit -m "Study desk starter"
-# create an empty repo on github.com named study-desk, then:
-git remote add origin https://github.com/YOUR-NAME/study-desk.git
-git branch -M main && git push -u origin main
-```
-
 ## Set up the Other Machine
 
 ```bash
-git clone https://github.com/YOUR-NAME/study-desk.git ~/study-desk
+git clone https://github.com/alexmatthes/retro-desktop.git ~/retro-desktop
 cd ~/study-desk
 bash stream/setup.sh             # installs Xvfb, PulseAudio, ffmpeg, fonts, Chrome + the service
 nano stream/stream.conf          # paste your YouTube stream key
@@ -65,16 +57,16 @@ nano stream/stream.conf          # paste your YouTube stream key
 Copy your music over from your machine:
 
 ```bash
-scp music/* YOUR-USER@OPTIPLEX-IP:~/study-desk/music/
+scp music/* YOUR-USER@IP:~/retro-desktop/music/
 ```
 
 ## Running it
 
-| Do this | Command (on the OptiPlex) |
+| Do this | Command |
 |---|---|
-| Go live | `sudo systemctl start study-desk` |
-| Stop | `sudo systemctl stop study-desk` |
-| Watch logs | `journalctl -u study-desk -f` |
+| Go live | `sudo systemctl start retro-desktop` |
+| Stop | `sudo systemctl stop retro-desktop` |
+| Watch logs | `journalctl -u retro-desktop -f` |
 | Load changes you pushed to GitHub | `bash stream/refresh.sh` |
 
 It starts by itself on boot and restarts itself after crashes or internet drops.
