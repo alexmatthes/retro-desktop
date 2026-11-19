@@ -18,7 +18,7 @@ X264_PRESET=veryfast   # slower CPU? superfast, then ultrafast (lighter but bloc
 AUDIO_BITRATE=128k
 
 # Local web server that shows the desktop page to the browser.
-PORT=8080
+PORT=8765   # 8080 is often taken (e.g. by a webcam streamer on Klipper machines)
 
 # Restart the browser this often to clear memory leaks (a few seconds of blank screen).
 CHROME_RESTART_HOURS=24

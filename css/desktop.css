@@ -2,106 +2,505 @@
    Window frames/buttons/progress bars come from 7.css (MIT, see 7.css.LICENSE).
    Rule of thumb for the OptiPlex: no backdrop-filter / blur, few animations. */
 
-html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
-
-#stage {
-  position: absolute; left: 50%; top: 50%;
-  width: 1280px; height: 720px;
-  transform: translate(-50%, -50%) scale(var(--scale, 1));
-  overflow: hidden;
-  font: 9pt "Segoe UI", "Noto Sans", "Open Sans", "DejaVu Sans", sans-serif;
-  user-select: none;
+html,
+body {
+    margin: 0;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
 }
 
-/* ---------- Wallpaper (original, gradients only) ---------- */
+#stage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1280px;
+    height: 720px;
+    transform: translate(-50%, -50%) scale(var(--scale, 1));
+    overflow: hidden;
+    font: 9pt "Segoe UI", "Noto Sans", "Open Sans", "DejaVu Sans", sans-serif;
+    user-select: none;
+}
+
+/* ---------- Wallpapers (original SVG art in index.html) ---------- */
 .wallpaper {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 55% 9% at 38% 60%, rgba(150, 235, 255, .45), transparent 70%),
-    radial-gradient(ellipse 70% 14% at 55% 52%, rgba(70, 230, 200, .22), transparent 70%),
-    radial-gradient(ellipse 60% 10% at 70% 66%, rgba(90, 150, 255, .35), transparent 70%),
-    radial-gradient(ellipse 45% 30% at 85% 80%, rgba(40, 90, 200, .35), transparent 70%),
-    radial-gradient(circle at 15% 15%, rgba(255, 255, 255, .07), transparent 35%),
-    linear-gradient(165deg, #030c20 0%, #0a2f5c 40%, #0b5574 62%, #072a45 82%, #020a18 100%);
+    position: absolute;
+    inset: 0;
+    background: #0a2f5c;
+}
+
+.wp {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.wp-night {
+    opacity: 0;
+    transition: opacity var(--fade, 90s) ease-in-out;
+}
+
+#stage.theme-night .wp-night {
+    opacity: 1;
+}
+
+#stage.no-anim,
+#stage.no-anim *,
+#stage.no-anim *::before,
+#stage.no-anim *::after {
+    transition: none !important;
 }
 
 /* ---------- Desktop icons ---------- */
-.desktop-icons { position: absolute; left: 14px; top: 16px; display: flex; flex-direction: column; gap: 18px; }
-.desktop-icon { width: 84px; display: flex; flex-direction: column; align-items: center; color: #fff;
-  text-align: center; font-size: 12px; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
-.desktop-icon svg { width: 48px; height: 48px; margin-bottom: 4px; }
+.desktop-icons {
+    position: absolute;
+    left: 14px;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.desktop-icon {
+    width: 84px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    text-shadow: 0 1px 2px #000, 0 0 4px #000;
+}
+
+.desktop-icon svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 4px;
+}
 
 /* ---------- Windows ---------- */
-.window { position: absolute; }
-#win-player { left: 120px; top: 34px; width: 512px; }
-#win-notes  { left: 664px; top: 50px; width: 360px; }
-#win-timer  { left: 664px; top: 318px; width: 360px; }
-.title-bar-text { font-size: 12px; }
+.window {
+    position: absolute;
+}
+
+#win-player {
+    left: 120px;
+    top: 34px;
+    width: 512px;
+}
+
+#win-notes {
+    left: 664px;
+    top: 50px;
+    width: 360px;
+}
+
+#win-timer {
+    left: 664px;
+    top: 318px;
+    width: 360px;
+}
+
+.title-bar-text {
+    font-size: 12px;
+}
 
 /* Media player: dark body like old media players */
-.player-body { background: linear-gradient(#1b2633, #070b10) !important; color: #e8f2ff; padding: 6px 6px 10px; }
-#viz { display: block; width: 488px; height: 170px; margin: 0 auto 8px; border: 1px solid #000;
-  background: radial-gradient(ellipse at 50% 120%, #0f3550, #02060b 70%); }
-.track-title { font-size: 20px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
-.track-artist { font-size: 14px; color: #9fc3e6; padding: 2px 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.track-bar { margin: 0 4px; }
-.track-times { display: flex; justify-content: space-between; font-size: 12px; color: #9fb2c6; padding: 4px 4px 0; }
-.status-bar-field { font-size: 12px; }
+.player-body {
+    background: linear-gradient(#1b2633, #070b10) !important;
+    color: #e8f2ff;
+    padding: 6px 6px 10px;
+}
+
+#viz {
+    display: block;
+    width: 488px;
+    height: 170px;
+    margin: 0 auto 8px;
+    border: 1px solid #000;
+    background: radial-gradient(ellipse at 50% 120%, #0f3550, #02060b 70%);
+}
+
+.track-title {
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 4px;
+}
+
+.track-artist {
+    font-size: 14px;
+    color: #9fc3e6;
+    padding: 2px 4px 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-bar {
+    margin: 0 4px;
+}
+
+.track-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #9fb2c6;
+    padding: 4px 4px 0;
+}
+
+.status-bar-field {
+    font-size: 12px;
+}
 
 /* Notes */
-.notes-body { background: #fff !important; height: 210px; overflow: hidden; }
-.notes-body pre { margin: 0; padding: 8px 10px; font: 14px/1.45 "Lucida Console", "DejaVu Sans Mono", "Noto Sans Mono", monospace;
-  color: #111; white-space: pre-wrap; }
+.notes-body {
+    background: #fff !important;
+    height: 210px;
+    overflow: hidden;
+}
+
+.notes-body pre {
+    margin: 0;
+    padding: 8px 10px;
+    font: 14px/1.45 "Lucida Console", "DejaVu Sans Mono", "Noto Sans Mono", monospace;
+    color: #111;
+    white-space: pre-wrap;
+}
 
 /* Timer */
-.timer-body { text-align: center; padding: 10px 14px 14px !important; }
-.phase { font-size: 15px; color: #1e4f8a; font-weight: 600; }
-.timer-body.on-break .phase { color: #8a6a00; }
-.timer-digits { font-size: 64px; line-height: 1.1; font-weight: 300; color: #1b2733; margin: 2px 0 8px;
-  font-variant-numeric: tabular-nums; }
-.timer-body [role=progressbar] { height: 18px; }
-.timer-next { font-size: 13px; color: #555; margin-top: 8px; }
+.timer-body {
+    text-align: center;
+    padding: 10px 14px 14px !important;
+}
+
+.phase {
+    font-size: 15px;
+    color: #1e4f8a;
+    font-weight: 600;
+}
+
+.timer-body.on-break .phase {
+    color: #8a6a00;
+}
+
+.timer-digits {
+    font-size: 64px;
+    line-height: 1.1;
+    font-weight: 300;
+    color: #1b2733;
+    margin: 2px 0 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-body [role=progressbar] {
+    height: 18px;
+}
+
+.timer-next {
+    font-size: 13px;
+    color: #555;
+    margin-top: 8px;
+}
 
 /* ---------- Sidebar gadgets ---------- */
-.sidebar { position: absolute; right: 22px; top: 30px; width: 190px; display: flex; flex-direction: column; align-items: center; gap: 22px; }
-.clock-gadget svg { width: 160px; height: 160px; filter: drop-shadow(0 4px 6px rgba(0,0,0,.6)); }
-.weather-gadget { width: 186px; height: 92px; border-radius: 10px; display: flex; align-items: center; gap: 8px; padding: 0 10px;
-  box-sizing: border-box; color: #fff;
-  background: linear-gradient(#5aa7e0 0%, #2a6fb5 48%, #1c5797 52%, #2f7fc4 100%);
-  border: 1px solid rgba(0, 0, 0, .55); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 4px 10px rgba(0,0,0,.5); }
-.weather-icon { width: 56px; height: 56px; flex: none; }
-.weather-icon svg { width: 56px; height: 56px; }
-.weather-temp { font-size: 30px; font-weight: 600; line-height: 1; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
-.weather-cond { font-size: 12px; margin-top: 3px; }
-.weather-loc { font-size: 11px; opacity: .85; }
+.sidebar {
+    position: absolute;
+    right: 22px;
+    top: 22px;
+    width: 190px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
 
-.watermark { position: absolute; right: 22px; bottom: 48px; color: rgba(255,255,255,.55); font-size: 13px;
-  text-shadow: 0 1px 2px #000; text-align: right; }
+.clock-gadget svg {
+    width: 140px;
+    height: 140px;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .6));
+}
 
-.balloon { position: absolute; right: 12px; bottom: 54px; width: 250px; font-size: 12px; }
-.balloon[hidden] { display: none; }
+.weather-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.weather-card {
+    width: 186px;
+    height: 74px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 9px;
+    box-sizing: border-box;
+    color: #fff;
+    background: linear-gradient(#5aa7e0 0%, #2a6fb5 48%, #1c5797 52%, #2f7fc4 100%);
+    border: 1px solid rgba(0, 0, 0, .55);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 3px 8px rgba(0, 0, 0, .45);
+    transition: filter var(--fade, 90s);
+}
+
+.weather-icon {
+    width: 46px;
+    height: 46px;
+    flex: none;
+}
+
+.weather-icon svg {
+    width: 46px;
+    height: 46px;
+}
+
+.weather-text {
+    min-width: 0;
+    flex: 1;
+}
+
+.weather-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px;
+}
+
+.weather-temp {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+}
+
+.weather-time {
+    font-size: 11px;
+    opacity: .9;
+    white-space: nowrap;
+}
+
+.weather-cond {
+    font-size: 11px;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.weather-loc {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.watermark {
+    position: absolute;
+    right: 22px;
+    bottom: 48px;
+    color: rgba(255, 255, 255, .55);
+    font-size: 13px;
+    text-shadow: 0 1px 2px #000;
+    text-align: right;
+}
+
+.balloon {
+    position: absolute;
+    right: 12px;
+    bottom: 54px;
+    width: 250px;
+    font-size: 12px;
+}
+
+.balloon[hidden] {
+    display: none;
+}
+
+#phase-balloon {
+    width: 230px;
+}
+
+#phase-balloon strong {
+    font-size: 13px;
+}
 
 /* ---------- Taskbar ---------- */
-.taskbar { position: absolute; left: 0; right: 0; bottom: 0; height: 36px; display: flex; align-items: center;
-  background: linear-gradient(#4a5867 0%, #26323f 48%, #0d151d 52%, #17222d 100%);
-  border-top: 1px solid rgba(255,255,255,.35); box-shadow: 0 -1px 0 #000; }
-.orb { width: 40px; height: 40px; margin: -6px 10px 0 8px; border-radius: 50%; flex: none; display: grid; place-items: center;
-  background: radial-gradient(circle at 50% 30%, #c9f0ff 0%, #4cb3ee 30%, #155da6 62%, #0a2c5a 100%);
-  border: 1px solid #06172e; box-shadow: 0 0 8px rgba(80,180,255,.7), inset 0 1px 1px rgba(255,255,255,.8); }
-.orb svg { width: 20px; height: 20px; filter: drop-shadow(0 0 2px rgba(255,255,255,.8)); }
-.task-buttons { display: flex; gap: 4px; flex: 1; }
-.task-btn { width: 170px; height: 28px; box-sizing: border-box; display: flex; align-items: center; gap: 7px; padding: 0 8px;
-  color: #fff; font-size: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.6);
-  background: linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.06) 50%, rgba(0,0,0,.1) 51%, rgba(255,255,255,.08));
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); white-space: nowrap; overflow: hidden; }
-.task-btn.active { background: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.18) 50%, rgba(120,190,255,.15) 51%, rgba(120,190,255,.35)); }
-.task-ico { width: 16px; height: 16px; border-radius: 3px; flex: none; }
-.ico-music { background: linear-gradient(#ffb15c, #e0610e); }
-.ico-notes { background: linear-gradient(#ffffff, #b9c6d3); }
-.ico-timer { background: linear-gradient(#8ef08e, #1f9b2b); }
-.tray { display: flex; align-items: center; gap: 12px; height: 100%; padding: 0 12px 0 14px;
-  border-left: 1px solid rgba(0,0,0,.6); box-shadow: inset 1px 0 0 rgba(255,255,255,.15); }
-.live-pill { display: flex; align-items: center; gap: 5px; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .5px;
-  background: #b3140c; border: 1px solid #5e0803; border-radius: 3px; padding: 1px 6px; }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; }
-.tray-clock { color: #fff; font-size: 12px; text-align: center; line-height: 1.25; min-width: 70px; }
+.taskbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(#4a5867 0%, #26323f 48%, #0d151d 52%, #17222d 100%);
+    border-top: 1px solid rgba(255, 255, 255, .35);
+    box-shadow: 0 -1px 0 #000;
+}
+
+.orb {
+    width: 40px;
+    height: 40px;
+    margin: -6px 10px 0 8px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 50% 30%, #c9f0ff 0%, #4cb3ee 30%, #155da6 62%, #0a2c5a 100%);
+    border: 1px solid #06172e;
+    box-shadow: 0 0 8px rgba(80, 180, 255, .7), inset 0 1px 1px rgba(255, 255, 255, .8);
+}
+
+.orb svg {
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, .8));
+}
+
+.task-buttons {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+}
+
+.task-btn {
+    width: 170px;
+    height: 28px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 8px;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, .6);
+    background: linear-gradient(rgba(255, 255, 255, .18), rgba(255, 255, 255, .06) 50%, rgba(0, 0, 0, .1) 51%, rgba(255, 255, 255, .08));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.task-btn.active {
+    background: linear-gradient(rgba(255, 255, 255, .4), rgba(255, 255, 255, .18) 50%, rgba(120, 190, 255, .15) 51%, rgba(120, 190, 255, .35));
+}
+
+.task-ico {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    flex: none;
+}
+
+.ico-music {
+    background: linear-gradient(#ffb15c, #e0610e);
+}
+
+.ico-notes {
+    background: linear-gradient(#ffffff, #b9c6d3);
+}
+
+.ico-timer {
+    background: linear-gradient(#8ef08e, #1f9b2b);
+}
+
+.tray {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 100%;
+    padding: 0 12px 0 14px;
+    border-left: 1px solid rgba(0, 0, 0, .6);
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, .15);
+}
+
+.live-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    background: #b3140c;
+    border: 1px solid #5e0803;
+    border-radius: 3px;
+    padding: 1px 6px;
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.tray-clock {
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.25;
+    min-width: 70px;
+}
+
+/* ---------- Night theme: darker windows to match the dark wallpaper ---------- */
+.window:before,
+.title-bar,
+.window-body,
+.status-bar,
+.notes-body pre,
+.phase,
+.timer-digits,
+.timer-next {
+    transition: background-color var(--fade, 90s), color var(--fade, 90s);
+}
+
+#stage.theme-night .window:before,
+#stage.theme-night .title-bar {
+    background-color: #1f3d5e;
+}
+
+#stage.theme-night .notes-body {
+    background: #161b22 !important;
+}
+
+#stage.theme-night .notes-body pre {
+    color: #d6e2ef;
+}
+
+#stage.theme-night .timer-body {
+    background: #1b2028;
+}
+
+#stage.theme-night .phase {
+    color: #8cc4ff;
+}
+
+#stage.theme-night .timer-body.on-break .phase {
+    color: #f0cf5a;
+}
+
+#stage.theme-night .timer-digits {
+    color: #e8f0f8;
+}
+
+#stage.theme-night .timer-next {
+    color: #9aa8b8;
+}
+
+#stage.theme-night .status-bar {
+    background: #20262f;
+    color: #c9d4e0;
+}
+
+#stage.theme-night .status-bar-field {
+    border-color: #39424e;
+}
+
+#stage.theme-night .weather-card {
+    filter: brightness(.62) saturate(1.1);
+}

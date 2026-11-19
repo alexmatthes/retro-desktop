@@ -4,5 +4,5 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 git -C "$(dirname "$HERE")" pull --ff-only
-pkill -u "$(id -u)" -f -- "--user-data-dir=$HOME/.study-desk/chrome-profile" && echo "Browser restarting with the new version." \
+pkill -u "$(id -u)" -f -- "--user-data-dir=$HOME/.retro-desktop/chrome-profile" && echo "Browser restarting with the new version." \
   || echo "Browser wasn't running (is the stream on?)."

@@ -1,0 +1,8 @@
+Put your voice clips here (.mp3, .ogg, .wav or .m4a) and list them in js/config.js under "announcements".
+Name them anything. Several per phase is fine; one gets picked at random each time.
+
+  focus: ["voice/focus.mp3", "voice/lets-get-back-to-it.mp3"],
+  break: ["voice/break.mp3"],
+
+Tip: keep clips short (2-6 seconds) and record them about as loud as your music.
+To hear one without waiting for the timer, open the page, press F12, and type:  studyDesk.announce("break")

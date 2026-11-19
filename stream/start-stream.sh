@@ -12,7 +12,7 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SITE_DIR="$(dirname "$HERE")"
 CONF="$HERE/stream.conf"
-STATE="$HOME/.study-desk"
+STATE="$HOME/.retro-desktop"
 
 log() { echo "[$(date '+%F %T')] $*"; }
 die() { log "ERROR: $*"; exit 1; }
@@ -22,7 +22,7 @@ die() { log "ERROR: $*"; exit 1; }
 # shellcheck source=/dev/null
 source "$CONF"
 : "${WIDTH:=1280}" "${HEIGHT:=720}" "${FPS:=30}" "${VIDEO_BITRATE:=2500k}" "${X264_PRESET:=veryfast}"
-: "${AUDIO_BITRATE:=128k}" "${PORT:=8080}" "${CHROME_RESTART_HOURS:=24}" "${CHROME_EXTRA_FLAGS:=}" "${TEST_OUTPUT:=}"
+: "${AUDIO_BITRATE:=128k}" "${PORT:=8765}" "${CHROME_RESTART_HOURS:=24}" "${CHROME_EXTRA_FLAGS:=}" "${TEST_OUTPUT:=}"
 : "${RTMP_URL:=rtmps://a.rtmps.youtube.com/live2}" "${STREAM_KEY:=}"
 
 if [[ -z $TEST_OUTPUT ]]; then
@@ -40,7 +40,7 @@ done
 
 mkdir -p "$STATE"
 export DISPLAY=":99"
-export XDG_RUNTIME_DIR="/tmp/study-desk-run-$(id -u)"
+export XDG_RUNTIME_DIR="/tmp/retro-desktop-run-$(id -u)"
 mkdir -p -m 700 "$XDG_RUNTIME_DIR"
 
 # When this script exits for any reason, take every child process down with it.
@@ -61,7 +61,7 @@ log "Virtual screen ready (${WIDTH}x${HEIGHT})"
 pulseaudio --kill >/dev/null 2>&1
 pulseaudio --daemonize=no --exit-idle-time=-1 -n \
   --load="module-native-protocol-unix" \
-  --load="module-null-sink sink_name=stream sink_properties=device.description=StudyDesk" \
+  --load="module-null-sink sink_name=stream sink_properties=device.description=RetroDesktop" \
   >"$STATE/pulseaudio.log" 2>&1 &
 PULSE_PID=$!
 for _ in $(seq 50); do pactl info >/dev/null 2>&1 && break; sleep 0.2; done
@@ -70,9 +70,14 @@ pactl set-default-sink stream
 log "Virtual speaker ready"
 
 # ---------- 3. Local web server for the page (only reachable from this machine) ----------
-python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$SITE_DIR" >/dev/null 2>&1 &
+port_open() { (exec 3<>"/dev/tcp/127.0.0.1/$PORT") 2>/dev/null; }
+if port_open; then
+  die "Port $PORT is already used by another program (see: sudo ss -ltnp | grep :$PORT). Set a different PORT in $CONF."
+fi
+python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$SITE_DIR" >"$STATE/webserver.log" 2>&1 &
 WEB_PID=$!
-for _ in $(seq 50); do (exec 3<>"/dev/tcp/127.0.0.1/$PORT") 2>/dev/null && break; sleep 0.2; done
+for _ in $(seq 50); do port_open && break; sleep 0.2; done
+kill -0 "$WEB_PID" 2>/dev/null && port_open || die "Web server didn't start (see $STATE/webserver.log)."
 log "Web server ready on port $PORT"
 
 # ---------- 4. Browser (restarts on crash, and every CHROME_RESTART_HOURS) ----------
@@ -115,8 +120,11 @@ encoder_loop() {
 }
 encoder_loop &
 
-log "Study Desk is live. Logs: journalctl -u study-desk -f   (browser log: $STATE/chrome.log)"
+log "Retro Desktop is live. Logs: journalctl -u retro-desktop -f   (browser log: $STATE/chrome.log)"
 
 # If a core piece dies, exit so systemd restarts the whole thing cleanly.
 wait -n "$XVFB_PID" "$PULSE_PID" "$WEB_PID"
-die "A core process stopped (screen, audio or web server). Restarting."
+kill -0 "$XVFB_PID"  2>/dev/null || die "Virtual screen stopped (see $STATE/xvfb.log). Restarting."
+kill -0 "$PULSE_PID" 2>/dev/null || die "Audio server stopped (see $STATE/pulseaudio.log). Restarting."
+kill -0 "$WEB_PID"   2>/dev/null || die "Web server stopped (see $STATE/webserver.log). Restarting."
+die "A core process stopped. Restarting."

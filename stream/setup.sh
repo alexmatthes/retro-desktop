@@ -26,10 +26,18 @@ fi
 chmod 600 "$HERE/stream.conf"
 chmod +x "$HERE"/*.sh
 
-echo "==> Installing the study-desk service (starts on boot, restarts on crash)"
-sudo tee /etc/systemd/system/study-desk.service >/dev/null <<EOF
+# Older versions of this project called the service "study-desk". Remove it so two streams never run at once.
+if [[ -f /etc/systemd/system/study-desk.service ]]; then
+  echo "==> Removing the old study-desk service (renamed to retro-desktop)"
+  sudo systemctl disable --now study-desk || true
+  sudo rm -f /etc/systemd/system/study-desk.service
+  rm -rf "$HOME/.study-desk"
+fi
+
+echo "==> Installing the retro-desktop service (starts on boot, restarts on crash)"
+sudo tee /etc/systemd/system/retro-desktop.service >/dev/null <<EOF
 [Unit]
-Description=Visualgorithm Study Desk 24/7 stream
+Description=Visualgorithm Retro Desktop 24/7 stream
 After=network-online.target
 Wants=network-online.target
 
@@ -39,17 +47,19 @@ WorkingDirectory=$HERE
 ExecStart=/bin/bash $HERE/start-stream.sh
 Restart=always
 RestartSec=10
+# Lower priority than everything else, so Klipper and other services always come first
+Nice=10
 
 [Install]
 WantedBy=multi-user.target
 EOF
 sudo systemctl daemon-reload
-sudo systemctl enable study-desk
+sudo systemctl enable retro-desktop
 
 cat <<EOF
 
 Done. Next:
   1. nano $HERE/stream.conf          (paste your stream key)
-  2. sudo systemctl start study-desk  (go live)
-  3. journalctl -u study-desk -f      (watch the logs, Ctrl+C to stop watching)
+  2. sudo systemctl start retro-desktop  (go live)
+  3. journalctl -u retro-desktop -f      (watch the logs, Ctrl+C to stop watching)
 EOF
